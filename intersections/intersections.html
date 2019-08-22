@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="js/drawing_utilities.js"></script>
+    <script type="module" src="js/Main.js"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/styles.css" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Line intesection</title>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <script type="text/javascript">
+        $('#navbar').load("./navbar.html");
+    </script>
+
+    <div class="container col-md-12">
+        <div class="row">
+            <div id="contenedor" class="col-sm-12 col-md-7">
+                <canvas id="static-canvas"></canvas>
+                <canvas id="dinamic-canvas"></canvas>
+            </div>
+            <div class="col-sm-12 col-md-4 text-justify">
+                <h4 id="activos" class="col-md-12">Hola</h4>
+                <h4 id="cruzados" class="col-md-12">Hola</h4>
+                Este algoritmo cuenta en número de cruces en un conjunto dado de lineas <br>
+                Es un algoritmo de barrido y funciona así <br> <br> <i>
+                    1.-La linea recorre el tablero hasta que se encuentra con el extremo de una linea, si es el fin de
+                    una
+                    linea
+                    la saca de la lista de lineas activas y repite el paso 1, si es el principio de una linea sigue al
+                    paso
+                    2 <br>
+                    <br> 2.- Revisa si se cruza con alguna de las lineas en la lista de activos <br>
+                    <br> 3.- Si se cruza con alguna linea, agrega ese cruce a la lista de cruces <br>
+                    <br> 4.- Se agrega la linea a la lista de lineas activas</i> <br>
+            </div>
+        </div>
+        <div class="row botonera col-md-12">
+            <button class="btn btn-lg btn-primary" id="pause"><i class="material-icons">pause</i></button>
+            <button class="btn btn-lg btn-success" id="play"><i class="material-icons">play_arrow</i></button>
+            <button class="btn btn-lg btn-warning" id="reboot"><i class="material-icons">replay</i></button>
+            <button class="btn btn-lg btn-warning" id="new_points"><i class="material-icons">fiber_new</i></button>
+        </div>
+        <br> <br>
+        <div class="col-md-10 text-justify container">
+            <b>
+            Al igual que los otros algoritmo, cada paso simplifica la resolución de otros problemas geométricos, como
+            encontrar la intersección entre 2 lineas, o tocar puntos en un espacio infinito y denso, pero representado
+            de
+            manera finita y numerable en la computadora usando el canvas.
+
+            La complejidad del algoritmo es O(n^2) cuadrático, ya que en el peor caso, todas las lineas se cruzan entre
+            sí </b><br><br>
+        </div>
+    </div>
+</body>
+
+</html>

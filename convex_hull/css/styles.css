@@ -1,0 +1,24 @@
+
+button{
+    margin: 10px;
+}
+
+canvas {
+    border-style: solid;
+ 
+}
+#imagen{
+    max-width: 40%;
+}
+
+#static-canvas{
+    z-index: 1;
+    position: absolute;
+    
+}
+
+#dinamic-canvas{
+    position: absolute;
+    z-index: 2;
+    
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/drawing_utilities.js"></script>
+  <script type="module" src="js/Main.js"></script>
+  <title>Convex hull</title>
+
+</head>
+
+<body>
+  <div id="navbar"></div>
+  <script type="text/javascript">
+    $('#navbar').load("./navbar.html");
+  </script>
+
+  <div class="container col-md-12">
+    <div class="row">
+      <div id="contenedor" class="col-sm-12 col-md-7 col-lg-7">
+        <canvas id="static-canvas"></canvas>
+        <canvas id="dinamic-canvas"></canvas>
+      </div>
+      <div id="leyenda" class="col-sm-12 col-md-4 col-lg-4 text-justify">
+        <br>
+        <h1>Cierre convexo</h1>
+
+        El cierre convexo es el polígono convexo de menor tamaño que envuelve a todos los puntos.
+        El algoritmo mostrado se llama Quick hull
+        <br><br>
+        Quickhull es un algoritmo para calcular el cierre convexo de un conjunto finito de puntos en el plano. <br>
+        Utiliza un enfoque de dividir y conquistar similar al de quicksort, del que deriva su nombre.
+        Se considera que la complejidad promedio de su caso es O(n log n), mientras que en el peor de los casos toma
+        O(n^2)(cuadrático). <br>
+        <br> Sin embargo, a diferencia de quicksort, no hay una forma obvia de convertir el peor caso en un caso
+        promedio
+        y bajar su probabilidad. <br> Por lo tanto, que caso será promedio no se puede calcular fácilmente
+      </div>
+    </div>
+    <div class="row col-md-12">
+      <button class="btn btn-lg btn-primary" id="pause"><i class="material-icons">pause</i></button>
+      <button class="btn btn-lg btn-success" id="play"><i class="material-icons">play_arrow</i></button>
+      <button class="btn btn-lg btn-warning" id="reboot"><i class="material-icons">replay</i></button>
+      <button class="btn btn-lg btn-warning" id="new_points"><i class="material-icons">fiber_new</i></button>
+    </div>
+  </div>
+  <div class="container col-sm-10 text-justify">
+    <h1>El algoritmo</h1> <i>
+    <br>
+    Bajo circunstancias promedio, el algoritmo funciona realmente bien, aunque puede volverse lento en casos de alta
+    simetría en los puntos, o cuando hay muchos puntos que yacen muy cerca de la circunferencia del centro al punto
+    más lejano, el algoritmo se comporte de los siguentes pasos.
+    <br> <br>
+    1.-Encuentra los puntos con la mínima y máxima coordenada en x, estos 2 puntos siempre estarán en el cierre convexo
+    y únelos con una línea <br>
+    <br>2.-Usa la linea formada y divide el conjunto en dos subconjuntos, el inferios y el superior, cada uno
+    de ellos será procesador recursivamente <br>
+    <br>3.-Encuentra el punto de un lado de la linea, que esté más lejano a la linea, este punto formará un triángulo
+    con los extremos de la linea <br>
+    <br>4.-Los puntos dentro del triángulo no pueden ser parte del cierre convexo, por lo tanto serán ignorados en los
+    siguentes pasos <br>
+    <br>5.-Repite los anteriores 2 pasos recursivamente con las dos lineas formadas en el nuevo triangulo. <br>
+    <br>6.-Repite estos pasos hasta que no haya más puntos fuera del triángulo. <br> <br></i>
+    Es importante ver que algunos de estos pasos incluyen subpasos más complejos, como el hecho de saber si un punto
+    está sobre o debajo de una linea, conocer la distancia de un punto a una linea, son pasos que invocan a resolver otros
+    problemas geométricos.
+    <br> <br>
+    A continuación se muestra el algoritmo en javascript
+    <br>
+    <code>
+      <pre>
+          /**Regresa el cierre convexo, superior o inferior
+           * relativo a la recta dada, y sin incluir a los puntos dados
+           */
+          async convex_hull_recursive(point1, point2, points, orientation) {
+            draw_line(this.canvas, point1.x, point1.y, point2.x, point2.y);
+            await delay(700);//Espera para no ir tan rápido
+            if (points.length == 0) {//No hay más puntos termina, caso base
+              this.convex_hull_lines.push({ a: point1, b: point2 });
+              draw_line(this.background, point1.x, point1.y, point2.x, point2.y, "red", 3);
+              return;
+            }
+            //Ordeno los puntos según su distancia y obtengo al más lejano
+            let farest = points.pop();
+            //obtengo todos los puntos inferiores a la linea y todos los puntos superiores a la linea
+            //a cada linea de las 2 nuevas del triangulo
+            let left_set = lower_upper_points(point1, farest, points);
+            let right_set = lower_upper_points(farest, point2, points);
+
+            //Esto sirve para ver que cota estoy resolviendo la parte de arriba o la de abajo
+            if (orientation == "superior") {
+              left_set = left_set.upper;
+              right_set = right_set.upper;
+            } else if (orientation == "inferior") {
+              left_set = left_set.lower;
+              right_set = right_set.lower;
+            }
+
+            //Llamo recursivamente 
+            await this.convex_hull_recursive(point1, farest, left_set, orientation);
+            await this.convex_hull_recursive(farest, point2, right_set, orientation);
+          }
+      </pre>
+    </code>
+  </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+
+button{
+    margin: 10px;
+}
+#leyenda{
+
+    text-align: justify;
+}
+
+#imagen{
+    max-width: 40%;
+}
+canvas {
+    border-style: solid;
+
+}
+
+
+#static-canvas{
+    z-index: 1;
+    position: absolute;
+    
+}
+
+#dinamic-canvas{
+    position: absolute;
+    z-index: 2;
+    
+}
